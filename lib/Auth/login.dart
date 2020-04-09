@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:safety_rescue/Auth/forget_password.dart';
 import 'logout.dart';
 import 'package:safety_rescue/componants/color.dart';
 import 'package:safety_rescue/componants/constant.dart';
@@ -293,7 +294,9 @@ class _LoginState extends State<Login> {
               child: InkWell(
                 onTap: () {
                   Navigator.push(
-                      context, MaterialPageRoute(builder: (context) => Test()));
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgetPassword()));
                 },
                 child: Text(
                   'Forgot Password?',
