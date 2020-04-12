@@ -4,6 +4,7 @@ import 'package:safety_rescue/Auth/logout.dart';
 import 'package:safety_rescue/Auth/login.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:safety_rescue/screens/home.dart';
 import 'package:safety_rescue/services/service_forgetpassword.dart';
 
 import 'services/service_login.dart';
@@ -24,8 +25,9 @@ Future<void> main() async {
   var token = prefs.getString('token');
   print(token);
   runApp(MaterialApp(
-      debugShowCheckedModeBanner: false, home: token == null ? Logout() : Test()
-      //home: MainPage(),
-//  home: ConfirmCode(),
+      debugShowCheckedModeBanner: false,
+      //home: token == null ? Logout() : Test()
+home: Home(),
+
       ));
 }

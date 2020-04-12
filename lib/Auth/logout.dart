@@ -158,6 +158,34 @@ class _LogoutState extends State<Logout> {
                   ),
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.only(top: 660.0),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "New User ?",
+                        style: TextStyle(color: Colors.white),
+                      ),
+//                      FlatButton(
+//                          onPressed: () {
+//                            Navigator.push(
+//                                context,
+//                                MaterialPageRoute(
+//                                    builder: (context) => SignUp()));
+//                          },
+//                          child: Padding(
+//                            padding: const EdgeInsets.only(right: 10.0),
+//                            child: Text(
+//                              "SignUp",
+//                              style: TextStyle(color: Accent1),
+//                            ),
+//                          )),
+                    ],
+                  ),
+                ),
+              )
             ],
           ),
         ),

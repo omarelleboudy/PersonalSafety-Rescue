@@ -102,7 +102,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: primaryColor,
+        backgroundColor: Accent1,
         resizeToAvoidBottomInset: true,
         body: Center(
           child: Builder(builder: (_) {
@@ -113,22 +113,17 @@ class _LoginState extends State<Login> {
               scrollDirection: Axis.vertical,
               child: Column(children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.only(top: 50),
+                  padding: const EdgeInsets.only(top: 10),
                   child: Container(
-                    height: displaySize(context).height * .4,
-                    width: displaySize(context).width * .8,
+                    height: displaySize(context).height * .3,
+                    width: displaySize(context).width * .7,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        bottomLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                        bottomRight: Radius.circular(30),
-                      ),
+                      borderRadius: BorderRadius.all(Radius.circular(50))
                     ),
                     child: SvgPicture.asset(
                       'assets/images/location.svg',
-                      height: 250.0,
+                      height: 50,
                       width: 50.0,
                     ),
                   ),
@@ -141,7 +136,7 @@ class _LoginState extends State<Login> {
                     height: 50.0,
                     width: 300,
                     child: RaisedButton(
-                      color: Accent1,
+                      color: primaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: new BorderRadius.circular(30),
                       ),
@@ -301,8 +296,9 @@ class _LoginState extends State<Login> {
                 child: Text(
                   'Forgot Password?',
                   style: TextStyle(
-                      color: Accent1,
+                      color: Colors.white,
                       fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w600,
                       decoration: TextDecoration.underline),
                 ),
               ),
