@@ -19,4 +19,5 @@ class StaticVariables {
     prefs = await SharedPreferences.getInstance();
 
   }
+
 }

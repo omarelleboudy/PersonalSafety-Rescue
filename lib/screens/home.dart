@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:safety_rescue/models/api_response.dart';
+import 'package:safety_rescue/others/GlobalVar.dart';
 import 'package:safety_rescue/services/SocketHandler.dart';
 import 'dart:async';
 
@@ -38,6 +40,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           " New Mexico, 87104";
 
   int clientAge = 51;
+
+  Timer periodicalTimer;
+
+  void PeriodicallyUpdateInfo()
+  {
+
+    periodicalTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
+      if(GlobalVar.Get("requestresult", "").isNotEmpty) {
+        FillRequestData(GlobalVar.Get("requestresult", new APIResponse()));
+      }
+    });
+
+  }
 
   @override
   Widget _icon(IconData icon, {Color color = LightColor.iconColor}) {
@@ -732,7 +747,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       print("activerequestid is: " + StaticVariables.prefs.getInt("activerequestid").toString());
 
       if (StaticVariables.prefs.getInt("activerequestid") == -1)
-        return false;
+        return true;
 
       return false;
 
@@ -745,10 +760,19 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   }
 
-  void FillRequestData()
+  void FillRequestData(APIResponse result)
   {
+    this.setState(() {
 
-    //TODO: Modify the strings such as clientName based on API result
+      clientName = result.result['userSavedAddress'];
+      clientHomeAddress = result.result['userSavedAddress'];
+      clientMedicalHistory = result.result['userMedicalHistoryNotes'];
+      clientBloodType = result.result['userBloodTypeName'];
+      clientPhoneNumber = result.result['userPhoneNumber'];
+      clientEmail = result.result['userEmail'];
+      clientAge = result.result['userAge'];
+
+    });
 
   }
 

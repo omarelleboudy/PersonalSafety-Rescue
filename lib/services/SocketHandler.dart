@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
+import 'package:safety_rescue/others/GlobalVar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signalr_client/signalr_client.dart';
 import 'package:http/http.dart' as http;
@@ -75,6 +76,7 @@ class SocketHandler {
         var APIresult = APIResponse.fromJson(userMap);
         print(APIresult.status);
         print(APIresult.result);
+        GlobalVar.Set("requestresult", APIresult);
         //result = APIresult.result;
         print(APIresult.hasErrors);
         return APIresult;
@@ -126,42 +128,12 @@ class SocketHandler {
         "Please make sure that:\n \n \n- Email is not taken and is correct.\n- Password is Complex. \n- National ID is 14 digits. \n- Phone Number is 11 digits."));
   }
 
-  static Future<String> GetSOSRequestJson(int authorityType) async {
-
-    String connID = StaticVariables.prefs.getString('connectionid_client');
-
-    String toReturn = "{ \"authorityType\": " + authorityType.toString();
-
-    toReturn += ", \"longitude\": " + 5.toString();
-
-    toReturn += ", \"latitude\": " + 6.toString();
-
-    toReturn += ", \"connectionId\": \"" + connID + "\" }";
-
-    return toReturn;
-  }
-
   static void UpdateRescuerSOSState(List<Object> args) {
     StaticVariables.prefs.setInt("activerequestid", int.parse(args[0]));
     UpdateActiveSOSRequestDetails(StaticVariables.prefs.getInt("activerequestid"));
   }
 
   //#endregion
-
-  static void StartSharingLocation(
-      String functionName, int longitude, int latitude) {
-    _hubConnection.invoke(functionName,
-        args: <Object>["0101", "1010", longitude, latitude]);
-  }
-
-  static Map<String, String> GetFormattedMap(String long, String lat) {
-    Map<String, String> mapString = new Map<String, String>();
-
-    mapString.putIfAbsent("longitude", () => long);
-    mapString.putIfAbsent("latitude", () => lat);
-
-    return mapString;
-  }
 
   static Future<String> getAccessToken() async {
 

@@ -24,6 +24,7 @@ Future<void> main() async {
   setupLocator();
   WidgetsFlutterBinding.ensureInitialized();
   await StaticVariables.Init();
+  StaticVariables.prefs.setString("requestresult", "");
   StaticVariables.prefs.setInt("activerequestid", -1);
   var token = StaticVariables.prefs.getString('token');
   print(token);
