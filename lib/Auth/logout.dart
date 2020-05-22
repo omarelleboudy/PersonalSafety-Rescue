@@ -20,17 +20,22 @@ class _LogoutState extends State<Logout> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text('You are going to exit the application.'),
+            backgroundColor: Accent1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Text('Exit Application?', style: TextStyle(color: primaryColor)),
+            content: Text('You are going to exit the application.',
+                style: TextStyle(color: primaryColor)),
             actions: <Widget>[
               FlatButton(
-                child: Text('NO'),
+                child: Text('NO', style: TextStyle(color: primaryColor)),
                 onPressed: () {
                   Navigator.of(context).pop(false);
                 },
               ),
               FlatButton(
-                child: Text('YES'),
+                child: Text('YES', style: TextStyle(color: primaryColor)),
                 onPressed: () {
                   SystemNavigator.pop();
                 },
@@ -45,7 +50,7 @@ class _LogoutState extends State<Logout> {
     return WillPopScope(
       onWillPop: _onBackPressed,
       child: Scaffold(
-        backgroundColor: primaryColor,
+        backgroundColor: Accent1,
         resizeToAvoidBottomPadding: false,
         body: SingleChildScrollView(
           child: Stack(
@@ -158,34 +163,6 @@ class _LogoutState extends State<Logout> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 660.0),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "New User ?",
-                        style: TextStyle(color: Colors.white),
-                      ),
-//                      FlatButton(
-//                          onPressed: () {
-//                            Navigator.push(
-//                                context,
-//                                MaterialPageRoute(
-//                                    builder: (context) => SignUp()));
-//                          },
-//                          child: Padding(
-//                            padding: const EdgeInsets.only(right: 10.0),
-//                            child: Text(
-//                              "SignUp",
-//                              style: TextStyle(color: Accent1),
-//                            ),
-//                          )),
-                    ],
-                  ),
-                ),
-              )
             ],
           ),
         ),

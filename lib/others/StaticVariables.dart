@@ -6,9 +6,9 @@ class StaticVariables {
 
 
   static const
-  //API = 'https://personal-safety.azurewebsites.net/', //Publish
-  API = 'http://192.168.1.4:5000', //Test
-      clientServerURL = API + "/hubs/client",
+  API = 'https://personalsafety.azurewebsites.net/', //Publish
+  //API = 'http://192.168.1.4:5000', //Test
+      rescuerServerURL = API + "/hubs/rescuer",
       realtimeServerURL = API + "/hubs/realtime";
 
   static SharedPreferences prefs;

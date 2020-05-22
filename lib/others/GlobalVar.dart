@@ -12,7 +12,12 @@ class GlobalVar
 
   static void Set(String varName, Object value)
   {
-     dataStorage.putIfAbsent(varName, value);
+
+    if (dataStorage.containsKey(varName))
+      dataStorage.remove(varName);
+
+    dataStorage.putIfAbsent(varName, () => value);
+
   }
 
 }

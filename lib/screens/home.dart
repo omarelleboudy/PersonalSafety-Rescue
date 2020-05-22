@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:safety_rescue/models/api_response.dart';
 import 'package:safety_rescue/others/GlobalVar.dart';
@@ -47,8 +48,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   {
 
     periodicalTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
-      if(GlobalVar.Get("requestresult", "").isNotEmpty) {
+      try {
         FillRequestData(GlobalVar.Get("requestresult", new APIResponse()));
+      }
+      catch(Exception) {
+        //print("Couldn't fill info. \n Exception is: " + Exception.toString());
       }
     });
 
@@ -98,8 +102,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     onPressed: () async {
                       //_save("0");
                       StaticVariables.prefs.remove('token');
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Logout()));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Logout()));
                     },
                   )),
             ),
@@ -463,7 +469,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                             ),
                           color: Color(0xff494f68),
 //                          disabledColor: Color(0x777fa3),
-                          onPressed: () => {},
+                          onPressed: SocketHandler.SolveSOSRequest,
                           elevation: 0,
                         ),
                       ),
@@ -603,7 +609,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TitleText(
-                  text: 'Personal Safety',
+                  text: 'Personal Rescuer',
                   fontSize: 27,
                   fontWeight: FontWeight.w400,
                 ),
@@ -617,71 +623,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
             ),
           ],
         ));
-  }
-
-  CancelAlertDialog() {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          backgroundColor: Color(0xffFF2B56),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Container(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "Cancel Request",
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                      )),
-                ],
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Column(
-                children: <Widget>[
-                  Container(
-                      alignment: Alignment.topLeft,
-                      child: Text(
-                        "A facility operator was about to accept your request, Are you sure you want to cancel the pending request?",
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w300),
-                      )),
-                  SizedBox(
-                    height: 15,
-                  ),
-                  Container(
-                      height: 50.0,
-                      width: 200,
-                      child: RaisedButton(
-                        color: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(30),
-                        ),
-                        onPressed: () async {
-                          SocketHandler.SolveSOSRequest(StaticVariables.prefs.getInt("activerequestid"));
-                          Navigator.pop(context);
-//                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          "cancel",
-                          style:
-                          TextStyle(color: Color(0xffFF2B56), fontSize: 18),
-                        ),
-                      ))
-                ],
-              ),
-            ],
-          )),
-    );
   }
 
   alertDialog() {
@@ -723,15 +664,47 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         ));
   }
 
+  Future<bool> _onBackPressed() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Accent1,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            title: Text('Exit Application?', style: TextStyle(color: primaryColor)),
+            content: Text('You are going to exit the application.',
+                style: TextStyle(color: primaryColor)),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('NO', style: TextStyle(color: primaryColor)),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              FlatButton(
+                child: Text('YES', style: TextStyle(color: primaryColor)),
+                onPressed: () {
+                  SystemNavigator.pop();
+                },
+              ),
+            ],
+          );
+        });
+  }
+
   @override
   void initState() {
 
     super.initState();
 
+    SocketHandler.ConnectToClientChannel();
+
     Timer timer;
 
     timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if(StaticVariables.prefs.getString("activerequeststate") == "Cancelled") {
+      if(GlobalVar.Get("activerequeststate", "") == "Cancelled") {
         timer.cancel();
       }
       DoSearchAnimation();
@@ -744,9 +717,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     try {
 
-      print("activerequestid is: " + StaticVariables.prefs.getInt("activerequestid").toString());
+      //print("activerequestid is: " + GlobalVar.Get("activerequestid", -1).toString());
 
-      if (StaticVariables.prefs.getInt("activerequestid") == -1)
+      if ((GlobalVar.Get("activerequestid", -1)) == -1)
         return true;
 
       return false;
@@ -764,7 +737,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   {
     this.setState(() {
 
-      clientName = result.result['userSavedAddress'];
+      clientName = result.result['userFullName'];
       clientHomeAddress = result.result['userSavedAddress'];
       clientMedicalHistory = result.result['userMedicalHistoryNotes'];
       clientBloodType = result.result['userBloodTypeName'];
@@ -792,7 +765,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void DoSearchAnimation() async
   {
 
-    if (StaticVariables.prefs.getString("activerequeststate") != "Cancelled") {
+    if (GlobalVar.Get("activerequeststate", "") != "Cancelled") {
       _circle1FadeController = new AnimationController(duration: new Duration(
           milliseconds: 2000
       ),
@@ -855,57 +828,61 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Stack(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.only(top: 20),
-              child: _appBar(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 70),
-              child: _title(),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 150, left: 20, right: 20),
-              child: _rescuerData(),
-            ),
-            Center(
-              child: Visibility(
-                visible: RequestsAreEmpty(),
-                  child: Container(
-                    child: CircleAvatar(
-                      child: SvgPicture.asset(
-                        "assets/images/place-24px.svg",
-                        color: Colors.white,
-                        width: 100,
-                        height: 150,
+    PeriodicallyUpdateInfo();
+    return WillPopScope(
+      onWillPop: _onBackPressed,
+      child: Scaffold(
+          body: Stack(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: _appBar(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 70),
+                child: _title(),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 150, left: 20, right: 20),
+                child: _rescuerData(),
+              ),
+              Center(
+                child: Visibility(
+                  visible: RequestsAreEmpty(),
+                    child: Container(
+                      child: CircleAvatar(
+                        child: SvgPicture.asset(
+                          "assets/images/place-24px.svg",
+                          color: Colors.white,
+                          width: 100,
+                          height: 150,
+                        ),
+                        radius: _radiusAnimation == null? beginValue : _radiusAnimation.value,
+                        backgroundColor: GetColorBasedOnState().withOpacity(_fadeAnimation == null? 1 : _fadeAnimation.value),
                       ),
-                      radius: _radiusAnimation == null? beginValue : _radiusAnimation.value,
-                      backgroundColor: GetColorBasedOnState().withOpacity(_fadeAnimation == null? 1 : _fadeAnimation.value),
+                    ),
+                ),
+              ),
+              Center(
+                child: Visibility(
+                  visible: !RequestsAreEmpty(),
+                  child: _requestView(),
+                  ),
+                ),
+              Padding(
+                padding: const EdgeInsets.only(top: 600),
+                child: Visibility(
+                  visible: RequestsAreEmpty(),
+                    child: Container(
+                      height: 200,
+                      alignment: Alignment.bottomCenter,
+                      child: alertDialog(),
                     ),
                   ),
               ),
-            ),
-            Center(
-              child: Visibility(
-                visible: !RequestsAreEmpty(),
-                child: _requestView(),
-                ),
+              ],
               ),
-            Padding(
-              padding: const EdgeInsets.only(top: 600),
-              child: Visibility(
-                visible: RequestsAreEmpty(),
-                  child: Container(
-                    height: 200,
-                    alignment: Alignment.bottomCenter,
-                    child: alertDialog(),
-                  ),
-                ),
-            ),
-            ],
-            ),
-        );
+          ),
+    );
   }
 }

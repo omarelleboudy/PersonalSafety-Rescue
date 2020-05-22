@@ -4,7 +4,9 @@ import 'package:safety_rescue/Auth/logout.dart';
 import 'package:safety_rescue/Auth/login.dart';
 
 import 'package:get_it/get_it.dart';
+import 'package:safety_rescue/others/GlobalVar.dart';
 import 'package:safety_rescue/screens/home.dart';
+import 'package:safety_rescue/services/SocketHandler.dart';
 import 'package:safety_rescue/services/service_forgetpassword.dart';
 
 import 'others/StaticVariables.dart';
@@ -26,12 +28,13 @@ Future<void> main() async {
   await StaticVariables.Init();
   StaticVariables.prefs.setString("requestresult", "");
   StaticVariables.prefs.setInt("activerequestid", -1);
+  GlobalVar.Set("anything", "stringValue");
   var token = StaticVariables.prefs.getString('token');
   print(token);
   runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
-      //home: token == null ? Logout() : Test()
-home: Home(),
+      home: token == null ? Logout() : Home()
+//home: Login(),
 
       ));
 }

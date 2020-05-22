@@ -22,7 +22,7 @@ class SocketHandler {
 
     if (_hubConnection == null) {
       _hubConnection = HubConnectionBuilder()
-          .withUrl(StaticVariables.clientServerURL, options: httpOptions)
+          .withUrl(StaticVariables.rescuerServerURL, options: httpOptions)
           .build();
       _hubConnection.onclose((error) => connectionIsOpen = false);
       _hubConnection.on("ConnectionInfoChannel", SaveConnectionID_Rescuer);
@@ -65,7 +65,9 @@ class SocketHandler {
 
   static Future<APIResponse<dynamic>> GetSOSRequestDetails(String requestID) {
     print('*****************');
-
+    token = StaticVariables.prefs.getString('token');
+    print("Sending GetSOSRequestDetails with requuestID: " + requestID);
+    print("Token is: " + token);
     return http
         .get(StaticVariables.API + '/api/Rescuer/GetSOSRequestDetails' + '?requestId=' + requestID,
         headers: headers)
@@ -92,21 +94,22 @@ class SocketHandler {
   }
 
 
-  static Future<APIResponse<dynamic>> SolveSOSRequest(int requestID) async {
+  static Future<APIResponse<dynamic>> SolveSOSRequest() async {
     //String jsonRequest = await GetSOSRequestJson(requestType);
-
+    int requestID = GlobalVar.Get("activerequestid", -1);
     print("Calling API SolveSOSRequest with requestID " + requestID.toString() + " ..");
 
     token = StaticVariables.prefs.getString('token');
     return http
-        .put(StaticVariables.API + '/api/Rescuer/SolveSOSRequest',
-        headers: headers, body: requestID)
+        .put(StaticVariables.API + '/api/Rescuer/SolveSOSRequest?requestID=$requestID',
+        headers: headers)
         .then((data) {
       if (data.statusCode == 200) {
         Map userMap = jsonDecode(data.body);
         var APIresult = APIResponse.fromJson(userMap);
         print(APIresult.toString());
         print("Solve SOS SUCCESS");
+        GlobalVar.Set("activerequestid", -1);
         print(APIresult.result);
 //        var parsedJson = json.decode(APIresult.result);
 //        prefs.setString("activerequeststate", parsedJson['requestStateName']);
@@ -129,8 +132,10 @@ class SocketHandler {
   }
 
   static void UpdateRescuerSOSState(List<Object> args) {
-    StaticVariables.prefs.setInt("activerequestid", int.parse(args[0]));
-    UpdateActiveSOSRequestDetails(StaticVariables.prefs.getInt("activerequestid"));
+    print("Server requested updating server SOS State!");
+    print("Argument 0 is: " + args[0].toString());
+    GlobalVar.Set("activerequestid", args[0]);
+    UpdateActiveSOSRequestDetails(GlobalVar.Get("activerequestid", -1));
   }
 
   //#endregion
