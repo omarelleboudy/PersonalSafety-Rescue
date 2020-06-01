@@ -1,12 +1,11 @@
+import 'package:flutter_android_pet_tracking_background_service/models/api_response.dart';
+import 'package:flutter_android_pet_tracking_background_service/models/login.dart';
+import 'package:flutter_android_pet_tracking_background_service/others/StaticVariables.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:safety_rescue/models/api_response.dart';
-import 'package:safety_rescue/models/login.dart';
 import 'dart:developer';
-
-import 'package:safety_rescue/others/StaticVariables.dart';
 
 class LoginService {
   static var token = '';

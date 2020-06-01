@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_android_pet_tracking_background_service/screens/home.dart';
+import 'package:flutter_android_pet_tracking_background_service/services/service_forgetpassword.dart';
+import 'package:flutter_android_pet_tracking_background_service/services/service_login.dart';
 
-import 'package:safety_rescue/Auth/logout.dart';
-import 'package:safety_rescue/Auth/login.dart';
-
+import 'Auth/logout.dart';
+import 'others/GlobalVar.dart';
+import 'others/StaticVariables.dart';
 import 'package:get_it/get_it.dart';
-import 'package:safety_rescue/others/GlobalVar.dart';
-import 'package:safety_rescue/screens/home.dart';
-import 'package:safety_rescue/services/SocketHandler.dart';
-import 'package:safety_rescue/services/service_forgetpassword.dart';
 
-import 'others/StaticVariables.dart';
-import 'others/StaticVariables.dart';
-import 'services/service_login.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-import 'componants/test.dart';
-
-void setupLocator() {
-  GetIt.instance.registerLazySingleton(() => LoginService());
-  GetIt.instance.registerLazySingleton(() => ForgetPasswordService());
-}
+import 'utils/LatLngWrapper.dart';
 
 Future<void> main() async {
   //SocketHandler.ConnectSocket();
@@ -36,5 +25,10 @@ Future<void> main() async {
       home: token == null ? Logout() : Home()
 //home: Login(),
 
-      ));
+  ));
+}
+
+void setupLocator() {
+  GetIt.instance.registerLazySingleton(() => LoginService());
+  GetIt.instance.registerLazySingleton(() => ForgetPasswordService());
 }

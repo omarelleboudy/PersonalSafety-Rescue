@@ -9,6 +9,7 @@ class StaticVariables {
   API = 'https://personalsafety.azurewebsites.net/', //Publish
   //API = 'http://192.168.1.4:5000', //Test
       rescuerServerURL = API + "/hubs/rescuer",
+      locationServerURL = API + "/hubs/location",
       realtimeServerURL = API + "/hubs/realtime";
 
   static SharedPreferences prefs;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-import 'package:safety_rescue/componants/mediaQuery.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/mediaQuery.dart';
 
 final kHintStyle = TextStyle(
   color: Colors.grey,

@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
-import 'package:safety_rescue/others/GlobalVar.dart';
+import 'package:flutter_android_pet_tracking_background_service/others/GlobalVar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:signalr_client/signalr_client.dart';
 import 'package:http/http.dart' as http;
@@ -12,6 +12,9 @@ class SocketHandler {
 
   static bool connectionIsOpen = false;
   static HubConnection _hubConnection;
+
+  static bool connectionIsOpen2 = false;
+  static HubConnection _hubConnection2;
 
   static Future<void> ConnectToClientChannel() async {
 
@@ -36,6 +39,47 @@ class SocketHandler {
       connectionIsOpen = true;
       //StartSharingLocation("START_LOCATION_SHARING", 11, 15);
     }
+  }
+
+  static Future<void> ConnectToLocationChannel() async {
+
+    print("Trying to connect to location channel..");
+
+    final httpOptions = new HttpConnectionOptions(
+        accessTokenFactory: () async => await getAccessToken());
+
+    if (_hubConnection2 == null) {
+      _hubConnection2 = HubConnectionBuilder()
+          .withUrl(StaticVariables.locationServerURL, options: httpOptions)
+          .build();
+      _hubConnection2.onclose((error) => connectionIsOpen2 = false);
+      _hubConnection2.on("LocationChannel", GiveLocConnectionFeedback);
+    }
+
+    if (_hubConnection2.state != HubConnectionState.Connected) {
+      if (_hubConnection2.state != HubConnectionState.Disconnected)
+        await _hubConnection2.stop();
+      await _hubConnection2.start();
+      connectionIsOpen2 = true;
+      print("Connected to location hub!");
+      //StartSharingLocation("START_LOCATION_SHARING", 11, 15);
+    }
+  }
+
+  static void GiveLocConnectionFeedback(List<Object> args)
+  {
+
+    print("Got feedback from location hub!");
+
+  }
+  
+  static void SendLocationToServer(double latitude, double longitude)
+  {
+
+    List<Object> argList = [latitude, longitude];
+    
+    _hubConnection2.send("LocationChannel", argList);
+    
   }
 
   //#region ClientSOSRequest

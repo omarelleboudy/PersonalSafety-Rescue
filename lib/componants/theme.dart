@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:safety_rescue/componants/color.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/color.dart';
 
 
 

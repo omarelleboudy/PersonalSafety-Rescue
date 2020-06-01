@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:safety_rescue/Auth/forget_password.dart';
-import 'package:safety_rescue/others/StaticVariables.dart';
-import 'package:safety_rescue/screens/home.dart';
+import 'package:flutter_android_pet_tracking_background_service/Auth/forget_password.dart';
+import 'package:flutter_android_pet_tracking_background_service/others/StaticVariables.dart';
+import 'package:flutter_android_pet_tracking_background_service/screens/home.dart';
 import 'logout.dart';
-import 'package:safety_rescue/componants/color.dart';
-import 'package:safety_rescue/componants/constant.dart';
-import 'package:safety_rescue/componants/mediaQuery.dart';
-import 'package:safety_rescue/componants/test.dart';
-import 'package:safety_rescue/models/login.dart';
-import 'package:safety_rescue/services/service_login.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/color.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/constant.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/mediaQuery.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/test.dart';
+import 'package:flutter_android_pet_tracking_background_service/models/login.dart';
+import 'package:flutter_android_pet_tracking_background_service/services/service_login.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:developer';
 

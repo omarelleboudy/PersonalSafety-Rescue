@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_android_pet_tracking_background_service/services/service_forgetpassword.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'login.dart';
-import 'package:safety_rescue/componants/constant.dart';
-import 'package:safety_rescue/componants/color.dart';
-import 'package:safety_rescue/componants/mediaQuery.dart';
-import 'package:safety_rescue/models/forget_password.dart';
-import 'package:safety_rescue/services/service_forgetpassword.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/constant.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/color.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/mediaQuery.dart';
+import 'package:flutter_android_pet_tracking_background_service/models/forget_password.dart';
+import 'package:flutter_android_pet_tracking_background_service/services/service_forgetpassword.dart';
 
 class ForgetPassword extends StatefulWidget {
   @override
