@@ -72,14 +72,12 @@ class SocketHandler {
     print("Got feedback from location hub!");
 
   }
-  
+
   static void SendLocationToServer(double latitude, double longitude)
   {
 
-    List<Object> argList = [latitude, longitude];
-    
-    _hubConnection2.send("LocationChannel", argList);
-    
+    _hubConnection.invoke("LocationChannel", args: <Object>[latitude, longitude]);
+
   }
 
   //#region ClientSOSRequest
