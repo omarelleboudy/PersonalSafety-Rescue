@@ -9,7 +9,6 @@ import 'dart:developer';
 
 class LoginService {
   static var token = '';
-  static const headers = {'Content-Type': 'application/json'};
 
   Future<bool> saveTokenPreference(String token, String key) async {
     final prefs = await SharedPreferences.getInstance();
@@ -23,6 +22,8 @@ class LoginService {
 
     print("Trying to login to " + finalString);
 
+    const headers = {'Content-Type': 'application/json'};
+
     return http
         .post(finalString, headers: headers, body: json.encode(item.toJson()))
         .then((data) {
@@ -30,19 +31,12 @@ class LoginService {
         Map userMap = jsonDecode(data.body);
 //        APIResponse<LoginResponse> test =
         var APIresult = APIResponse.fromJson(userMap);
-
         var retrievedToken =
-            userMap['result']['authenticationDetails']['token'];
-        var refreshToken =
-            userMap['result']['authenticationDetails']['refreshToken'];
+        userMap['result']['authenticationDetails']['token'];
         var loginName =
         userMap['result']['accountDetails']['fullName'];
         StaticVariables.prefs.setString("fullname", loginName);
-        var currentDate = DateTime.now();
-        print("Result: " + userMap['result']);
         saveTokenPreference(retrievedToken, "token");
-        saveTokenPreference(refreshToken, "refreshToken");
-        saveTokenPreference(currentDate.toString(), "tokenDate");
 
         print('From Login Service:  ${APIresult.status}');
 
@@ -57,6 +51,6 @@ class LoginService {
       return APIResponse<dynamic>(
           hasErrors: true, messages: "An Error Has Occured");
     }).catchError((_) => APIResponse<dynamic>(
-            hasErrors: true, messages: "An Error Has Occured"));
+        hasErrors: true, messages: "An Error Has Occured"));
   }
 }
