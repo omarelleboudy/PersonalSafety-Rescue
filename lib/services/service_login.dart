@@ -35,8 +35,11 @@ class LoginService {
             userMap['result']['authenticationDetails']['token'];
         var refreshToken =
             userMap['result']['authenticationDetails']['refreshToken'];
+        var loginName =
+        userMap['result']['accountDetails']['fullName'];
+        StaticVariables.prefs.setString("fullname", loginName);
         var currentDate = DateTime.now();
-
+        print("Result: " + userMap['result']);
         saveTokenPreference(retrievedToken, "token");
         saveTokenPreference(refreshToken, "refreshToken");
         saveTokenPreference(currentDate.toString(), "tokenDate");

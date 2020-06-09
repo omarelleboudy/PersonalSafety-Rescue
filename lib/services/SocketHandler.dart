@@ -105,6 +105,32 @@ class SocketHandler {
 
   }
 
+  static Future<APIResponse<dynamic>> GetBasicInfo() {
+    token = StaticVariables.prefs.getString('token');
+    return http
+        .get(StaticVariables.API + '/api/Account/Personnel/GetBasicInfo',
+        headers: headers)
+        .then((data) {
+      if (data.statusCode == 200) {
+        Map userMap = jsonDecode(data.body);
+        var APIresult = APIResponse.fromJson(userMap);
+        print(APIresult.status);
+        print(APIresult.result);
+        GlobalVar.Set("basicinfo", APIresult.result);
+        //result = APIresult.result;
+        print(APIresult.hasErrors);
+        return APIresult;
+      } else {
+        print('============================');
+        print(data.statusCode);
+        print("-----------------------------");
+      }
+      return APIResponse<dynamic>(
+          hasErrors: true, messages: "An Error Has Occured");
+    }).catchError((_) => APIResponse<dynamic>(
+        hasErrors: true, messages: "An Error Has Occured"));
+  }
+
   static Future<APIResponse<dynamic>> GetSOSRequestDetails(String requestID) {
     print('*****************');
     token = StaticVariables.prefs.getString('token');

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_android_pet_tracking_background_service/Auth/login.dart';
 import 'package:flutter_android_pet_tracking_background_service/communication/android_communication.dart';
 import 'package:flutter_android_pet_tracking_background_service/utils/AndroidCall.dart';
 import 'package:flutter_android_pet_tracking_background_service/utils/LatLngWrapper.dart';
@@ -47,6 +48,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   LatLng _center = const LatLng(45.521563, -122.677433);
 
+  String imgName = "badge", fullName = "Loading..";
+
   @override
   void initState() {
 
@@ -71,6 +74,51 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       }
       DoSearchAnimation();
     });
+
+    setState(() {
+
+      fullName = StaticVariables.prefs.getString("fullname");
+
+    });
+
+  }
+
+  void GetImageNameBasedOnAuth() async
+  {
+
+    await SocketHandler.GetBasicInfo();
+
+    Map<String, dynamic> map = GlobalVar.Get("basicinfo", new Map<String, dynamic>());
+
+    switch(map["authorityTypeName"])
+    {
+
+      case "Police":
+
+        imgName = "badge";
+
+        break;
+
+      case "Ambulance":
+
+        imgName = "ambulance";
+
+        break;
+
+      case "TowTruck":
+
+        imgName = "tow-truck";
+
+        break;
+
+      case "Firefighting":
+
+        imgName = "firefighter";
+
+        break;
+
+    }
+
   }
 
 //  @override
@@ -677,7 +725,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           Padding(
               padding: const EdgeInsets.only(top: 20.0, left: 15),
               child: Text(
-                "Agent Jesse Pinkman",
+                "Agent " + fullName,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w600,
@@ -699,7 +747,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 height:50,
                 width: 50,
 
-                child: SvgPicture.asset("assets/images/badge.svg")
+                child: SvgPicture.asset("assets/images/" + imgName + ".svg")
 
 
             ),
@@ -737,7 +785,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   height:50,
                   width: 50,
 
-                  child: SvgPicture.asset("assets/images/badge.svg")
+                  child: SvgPicture.asset("assets/images/" + imgName + ".svg")
 
 
               ),
