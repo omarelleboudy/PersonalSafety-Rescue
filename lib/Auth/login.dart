@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:safety_rescue/Auth/forget_password.dart';
+import 'package:flutter_android_pet_tracking_background_service/Auth/forget_password.dart';
+import 'package:flutter_android_pet_tracking_background_service/others/StaticVariables.dart';
+import 'package:flutter_android_pet_tracking_background_service/screens/home.dart';
 import 'logout.dart';
-import 'package:safety_rescue/componants/color.dart';
-import 'package:safety_rescue/componants/constant.dart';
-import 'package:safety_rescue/componants/mediaQuery.dart';
-import 'package:safety_rescue/componants/test.dart';
-import 'package:safety_rescue/models/login.dart';
-import 'package:safety_rescue/services/service_login.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/color.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/constant.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/mediaQuery.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/test.dart';
+import 'package:flutter_android_pet_tracking_background_service/models/login.dart';
+import 'package:flutter_android_pet_tracking_background_service/services/service_login.dart';
 import 'package:get_it/get_it.dart';
 import 'dart:developer';
 
@@ -35,16 +37,6 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   void saveToken(String resultToken) {
     saveTokenPreference(resultToken);
-  }
-
-  read() async {
-    final prefs = await SharedPreferences.getInstance();
-    value = prefs.get(key);
-    if (value != '0' && value != null) {
-      Navigator.of(context).push(new MaterialPageRoute(
-        builder: (BuildContext context) => new Test(),
-      ));
-    }
   }
 
   LoginService get userService => GetIt.instance<LoginService>();
@@ -75,7 +67,6 @@ class _LoginState extends State<Login> {
 
   @override
   void initState() {
-    read();
     _isLoading = false;
     super.initState();
   }
@@ -84,11 +75,18 @@ class _LoginState extends State<Login> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              title: Text(title),
-              content: Text(text),
+              backgroundColor: Accent1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              title: Text(
+                title,
+                style: TextStyle(color: primaryColor),
+              ),
+              content: Text(text, style: TextStyle(color: primaryColor)),
               actions: <Widget>[
                 FlatButton(
-                    child: Text('OK'),
+                    child: Text('OK', style: TextStyle(color: primaryColor)),
                     onPressed: () {
                       setState(() {
                         _isLoading = false;
@@ -104,119 +102,141 @@ class _LoginState extends State<Login> {
     return Scaffold(
         backgroundColor: Accent1,
         resizeToAvoidBottomInset: true,
-        body: Center(
-          child: Builder(builder: (_) {
-            if (_isLoading) {
-              return Center(child: CircularProgressIndicator());
-            }
-            return SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: Column(children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Container(
-                    height: displaySize(context).height * .3,
-                    width: displaySize(context).width * .7,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(50))
-                    ),
-                    child: SvgPicture.asset(
-                      'assets/images/location.svg',
-                      height: 50,
-                      width: 50.0,
+        body: GestureDetector(
+          onTap: () => FocusScope.of(context).requestFocus(new FocusNode()),
+          child: Center(
+            child: Builder(builder: (_) {
+              if (_isLoading) {
+                return Center(
+                    child: CustomLoadingIndicator(
+                  customColor: grey,
+                ));
+              }
+              return SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: Column(children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(top: 50),
+                    child: Container(
+                      height: displaySize(context).height * .4,
+                      width: displaySize(context).width * .8,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(30),
+                          bottomLeft: Radius.circular(30),
+                          topRight: Radius.circular(30),
+                          bottomRight: Radius.circular(30),
+                        ),
+                      ),
+                      child: SvgPicture.asset(
+                        'assets/images/location.svg',
+                        height: 250.0,
+                        width: 50.0,
+                      ),
                     ),
                   ),
-                ),
-                Form(key: _formKey, child: LoginForm()),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      top: 20, left: 70.0, bottom: 10, right: 70),
-                  child: Container(
-                    height: 50.0,
-                    width: 300,
-                    child: RaisedButton(
-                      color: primaryColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: new BorderRadius.circular(30),
-                      ),
-                      onPressed: () async {
-                        emailValidation();
-                        passwordValidation();
-                        if (emailFlag == true && passwordFlag == true) {
-                          setState(() async {
-                            setState(() {
-                              _isLoading = true;
-                            });
+                  Form(key: _formKey, child: LoginForm()),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        top: 20, left: 70.0, bottom: 10, right: 70),
+                    child: Container(
+                      height: 50.0,
+                      width: 300,
+                      child: RaisedButton(
+                        color: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30),
+                        ),
+                        onPressed: () async {
+                          emailValidation();
+                          passwordValidation();
+                          if (emailFlag == true && passwordFlag == true) {
+                            setState(() async {
+                              setState(() {
+                                _isLoading = true;
+                              });
 
-                            SharedPreferences prefs =
-                                await SharedPreferences.getInstance();
-                            prefs.setString(key, value);
-                            print("TOKEN IS SET! TOKEN IS SET!");
-                            //read();
+                              SharedPreferences prefs =
+                                  await SharedPreferences.getInstance();
+                              prefs.setString(key, value);
+                              print("TOKEN IS SET! TOKEN IS SET!");
+                              //read();
 
-                            final login = LoginCredentials(
-                              email: _loginController.text,
-                              password: _passwordController.text,
-                            );
-                            final result = await userService.Login(login);
-                            debugPrint(
-                                "from login: " + result.status.toString());
-                            debugPrint(
-                                "from login: " + result.result.toString());
-                            debugPrint(
-                                "from login: " + result.hasErrors.toString());
-                            final title =
-                                result.status == 0 ? 'Logged In!' : 'Error';
-                            final text = result.status == 0
-                                ? 'You will be forwarded to the next page!'
-                                : "Wrong Username or Password.\n\nIf you haven't confirmed your email address, please check your inbox for a Confirmation email.";
-                            showDialog(
-                                context: context,
-                                builder: (_) => AlertDialog(
-                                      title: Text(title),
-                                      content: Text(text),
-                                      actions: <Widget>[
-                                        FlatButton(
-                                            child: Text('OK'),
-                                            onPressed: () {
-                                              setState(() {
-                                                _isLoading = false;
-                                              });
-                                              Navigator.of(context).pop();
-                                              saveToken(result.result);
-                                            })
-                                      ],
-                                    )).then((data) {
+                              final login = LoginCredentials(
+                                email: _loginController.text,
+                                password: _passwordController.text,
+                              );
+                              final result = await userService.Login(login);
+                              debugPrint(
+                                  "from login: " + result.status.toString());
+                              debugPrint(
+                                  "from login: " + result.result.toString());
+                              debugPrint(
+                                  "from login: " + result.hasErrors.toString());
+                              final title =
+                                  result.status == 0 ? 'Logged In!' : 'Error';
+                              final text = result.status == 0
+                                  ? 'You will be forwarded to the next page!'
+                                  : "Wrong Username or Password.\n\nIf you haven't confirmed your email address, please check your inbox for a Confirmation email.";
+
                               if (result.status == 0) {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => Test()));
+                                        builder: (context) => Home()));
+                              } else {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          backgroundColor: Accent1,
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20.0),
+                                          ),
+                                          title: Text(
+                                            title,
+                                            style: TextStyle(color: primaryColor),
+                                          ),
+                                          content: Text(text,
+                                              style: TextStyle(color: primaryColor)),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                child: Text('OK',
+                                                    style:
+                                                        TextStyle(color: primaryColor)),
+                                                onPressed: () {
+                                                  setState(() {
+                                                    _isLoading = false;
+                                                  });
+                                                  Navigator.of(context).pop();
+                                                })
+                                          ],
+                                        ));
                               }
                             });
-                          });
-                        } else {
-                          ShowDialog(
-                              "Error", "Email and Password cannot be empty.");
-                        }
-                      },
-                      child: Center(
-                        child: Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          } else {
+                            ShowDialog(
+                                "Error", "Email and Password cannot be empty.");
+                          }
+                        },
+                        child: Center(
+                          child: Text(
+                            'Login',
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ]),
-            );
-          }),
+                ]),
+              );
+            }),
+          ),
         ));
   }
 
@@ -261,10 +281,11 @@ class _LoginState extends State<Login> {
                 contentPadding: const EdgeInsets.all(20),
                 hintText: "Password",
                 errorText: _validate ? 'Value Can\'t Be Empty' : null,
+                prefixIcon: Icon(Icons.lock),
                 suffixIcon: IconButton(
                   icon: Icon(
                     // Based on passwordVisible state choose the icon
-                    passwordVisible ? Icons.visibility : Icons.visibility_off,
+                    passwordVisible ? Icons.visibility_off : Icons.visibility,
                     color: Theme.of(context).primaryColorDark,
                   ),
                   onPressed: () {
@@ -280,33 +301,6 @@ class _LoginState extends State<Login> {
               obscureText: passwordVisible,
             ),
           ),
-        ),
-        Row(
-          children: <Widget>[
-            Container(
-              alignment: Alignment(.7, 0.0),
-              padding: EdgeInsets.only(top: 220, left: 20.0),
-              child: InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ForgetPassword()));
-                },
-                child: Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: 'Roboto',
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.underline),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 65,
-            ),
-          ],
         ),
       ],
     );

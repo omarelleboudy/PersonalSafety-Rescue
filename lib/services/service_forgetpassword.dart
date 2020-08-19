@@ -1,8 +1,8 @@
+import 'package:flutter_android_pet_tracking_background_service/models/api_response.dart';
+import 'package:flutter_android_pet_tracking_background_service/models/forget_password.dart';
+import 'package:flutter_android_pet_tracking_background_service/others/StaticVariables.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:safety_rescue/models/api_response.dart';
-import 'package:safety_rescue/models/forget_password.dart';
-import 'package:safety_rescue/others/StaticVariables.dart';
 
 class ForgetPasswordService {
   static var result = '';

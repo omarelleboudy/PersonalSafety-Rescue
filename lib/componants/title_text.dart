@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:safety_rescue/componants/color.dart';
+import 'package:flutter_android_pet_tracking_background_service/componants/color.dart';
 
 class TitleText extends StatelessWidget {
   final String text;

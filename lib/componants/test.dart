@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:safety_rescue/Auth/login.dart';
-import 'package:safety_rescue/Auth/logout.dart';
+import 'package:flutter_android_pet_tracking_background_service/Auth/login.dart';
+import 'package:flutter_android_pet_tracking_background_service/Auth/logout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Test extends StatefulWidget {
