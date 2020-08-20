@@ -8,6 +8,10 @@ Backend: https://personalsafety.azurewebsites.net/
 
 Backend Code: https://github.com/bfahm/PersonalSafety
 
-To run the application, clone the repository and get all dependencies in your IDE, then Install it on an Emulator or Real Device.
+## To Install this project:
 
-Interaction between Main and This app: https://drive.google.com/file/d/1x1a8GYWLSUFtST8psxa5UJVIofUhr0hX/view?usp=sharing
+This is a Flutter Application, so Flutter is required: https://flutter.dev/docs/get-started/install
+
+Simply clone or download this repository, open it in your IDE and get all dependencies then install it on Emulator or Real Device. This has only been tested on Android 9 devices, may not work on other versions. 
+
+# Interaction between Main and This app: https://drive.google.com/file/d/1x1a8GYWLSUFtST8psxa5UJVIofUhr0hX/view?usp=sharing
