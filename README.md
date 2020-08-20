@@ -14,5 +14,6 @@ This is a Flutter Application, so Flutter is required: https://flutter.dev/docs/
 
 Simply clone or download this repository, open it in your IDE and get all dependencies then install it on Emulator or Real Device. This has only been tested on Android 9 devices, may not work on other versions. 
 
-## Interaction between Main and This app: https://drive.google.com/file/d/1LRGAOUl46TNYeuN6j1gBJ_zgfq-9t9Mb/view?usp=sharing
+## Interaction between Main and This app: 
+https://drive.google.com/file/d/1LRGAOUl46TNYeuN6j1gBJ_zgfq-9t9Mb/view?usp=sharing
 
